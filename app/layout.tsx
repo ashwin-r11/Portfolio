@@ -1,6 +1,7 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import "./globals.css"
 // KaTeX CSS for LaTeX math rendering
 import "katex/dist/katex.min.css"
@@ -67,6 +68,7 @@ export default function RootLayout({
       <body className={`${spaceMono.className} antialiased`}>
         <ThemeProvider>{children}</ThemeProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   )
