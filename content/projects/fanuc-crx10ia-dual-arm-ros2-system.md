@@ -1,7 +1,7 @@
 ---
 title: "Fanuc CRX-10iA Dual-Arm ROS2 System"
 description: "A complete ROS2 Humble implementation of a dual-arm robotic system using two Fanuc CRX-10iA collaborative robots with Robotiq grippers."
-image: "/placeholder.svg"
+image: "/project1.png"
 tags: ["ROS2-Humble", "moveit2"]
 githubUrl: "https://github.com/ashwin-r11/Dexsent_round2"
 featured: true
@@ -11,9 +11,11 @@ featured: true
 
 A complete ROS2 Humble implementation of a dual-arm robotic system using two Fanuc CRX-10iA collaborative robots with Robotiq grippers.
 
-![ROS2 Humble](https://img.shields.io/badge/ROS2-Humble-blue)
-[![ROS2 Build & Test](https://github.com/ashwin-r11/Dexsent_round2/actions/workflows/ros2-ci.yml/badge.svg)](https://github.com/ashwin-r11/Dexsent_round2/actions/workflows/ros2-ci.yml)
-![License](https://img.shields.io/badge/License-BSD--3--Clause-green)
+<span style={{display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '1rem'}}>
+  <img src="https://img.shields.io/badge/ROS2-Humble-blue" alt="ROS2 Humble" height="20" />
+  <a href="https://github.com/ashwin-r11/Dexsent_round2/actions/workflows/ros2-ci.yml"><img src="https://github.com/ashwin-r11/Dexsent_round2/actions/workflows/ros2-ci.yml/badge.svg" alt="ROS2 Build & Test" height="20" /></a>
+  <img src="https://img.shields.io/badge/License-BSD--3--Clause-green" alt="License" height="20" />
+</span>
 
 ## Version History / Milestones
 
@@ -37,12 +39,20 @@ This project implements a dual-arm robotic workcell with:
 ## Demo Videos
 
 ### Task 1: Single Arm with Gripper
-https://github.com/user-attachments/assets/d5566bed-1d36-4f47-a5c9-10631cfb67cf
+
+<video controls width="100%" style={{borderRadius: '12px', marginTop: '1rem', marginBottom: '1rem'}}>
+  <source src="https://github.com/user-attachments/assets/d5566bed-1d36-4f47-a5c9-10631cfb67cf" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
 
 [Download Task 1 Demo](https://github.com/ashwin-r11/Dexsent_round2/raw/refs/heads/master/docs/vids/task1%20demo.mp4)
 
 ### Task 2: Dual-Arm Synchronized Motion
-https://github.com/user-attachments/assets/0d8bb7f4-822b-4086-a894-8e726680761c
+
+<video controls width="100%" style={{borderRadius: '12px', marginTop: '1rem', marginBottom: '1rem'}}>
+  <source src="https://github.com/user-attachments/assets/0d8bb7f4-822b-4086-a894-8e726680761c" type="video/mp4" />
+  Your browser does not support the video tag.
+</video>
 
 [Download Working Demo](https://github.com/ashwin-r11/Dexsent_round2/raw/refs/heads/master/docs/vids/working%20demo.mp4)
 
@@ -220,7 +230,7 @@ Defined in `dual_arm_controllers.yaml`:
 #### Mounting Reference Sketch
 *Sketch by: Ashwin R*
 * lol plz dont judge me i tried my best!!
-![Dual-Arm Mounting Sketch](https://github.com/ashwin-r11/Dexsent_round2/blob/master/docs/imgs/Note_sketches.jpeg)
+![Dual-Arm Mounting Sketch](https://raw.githubusercontent.com/ashwin-r11/Dexsent_round2/master/docs/imgs/Note_sketches.jpeg)
 
 ### Motion Planning
 - [MoveIt 2 Concepts](https://moveit.picknik.ai/main/doc/concepts/concepts.html)
