@@ -88,6 +88,7 @@ export const siteConfig = {
       "Backend Development",
       "Systems Engineering",
       "DevOps & Infrastructure",
+      "Robotics",
     ],
   },
 
