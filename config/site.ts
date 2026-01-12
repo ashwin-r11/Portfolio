@@ -99,7 +99,7 @@ export const siteConfig = {
     degree: "B.Tech Computer Science Engineering - IoT & Automation",
     school: "Sastra Deemed University",
     period: "2023 - 2027",
-    cgpa: "7.729",
+    cgpa: "7.8",
   },
 
   // ============================================
