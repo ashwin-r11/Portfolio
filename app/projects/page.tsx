@@ -1,6 +1,7 @@
+import { Suspense } from 'react'
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
-import { getAllProjectDocs, getAllProjectTags } from "@/lib/markdown"
+import { getAllProjectDocs } from "@/lib/markdown"
 import { fetchAllGitHubProjects } from "@/lib/github"
 import { githubProjects } from "@/config/github-projects"
 import { ProjectFilters } from "@/components/project-filters"
@@ -43,7 +44,9 @@ export default async function ProjectsPage() {
           </div>
 
           {/* Client-side filters */}
-          <ProjectFilters projects={allProjects} allTags={allTags} />
+          <Suspense fallback={<div className="mt-8">Loading projects...</div>}>
+            <ProjectFilters projects={allProjects} allTags={allTags} />
+          </Suspense>
         </div>
       </main>
       <Footer />
