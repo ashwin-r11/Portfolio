@@ -5,6 +5,8 @@ import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { ArrowLeft, ExternalLink, Github } from 'lucide-react'
 import { getProjectBySlug, getAllProjectSlugs } from '@/lib/markdown'
+import { fetchGitHubProject } from '@/lib/github'
+import { githubProjects } from '@/config/github-projects'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { mdxComponents } from '@/components/mdx-components'
 import remarkMath from 'remark-math'
@@ -12,16 +14,57 @@ import remarkGfm from 'remark-gfm'
 import rehypeKatex from 'rehype-katex'
 import rehypeHighlight from 'rehype-highlight'
 
-// Generate static paths for all projects
+// Helper to convert repo URL to slug
+function repoToSlug(repoName: string): string {
+    return `github-${repoName.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}`
+}
+
+// Generate static paths for all projects (manual + GitHub)
 export async function generateStaticParams() {
-    const slugs = getAllProjectSlugs()
-    return slugs.map((slug) => ({ slug }))
+    // Manual project slugs
+    const manualSlugs = getAllProjectSlugs()
+
+    // GitHub project slugs
+    const githubSlugs = githubProjects.map(config => {
+        const match = config.url.match(/github\.com\/[^\/]+\/([^\/]+)/i)
+        if (match) {
+            return repoToSlug(match[1].replace(/\.git$/, ''))
+        }
+        return null
+    }).filter(Boolean)
+
+    return [...manualSlugs, ...githubSlugs].map((slug) => ({ slug }))
+}
+
+// Helper to get project from any source
+async function getProject(slug: string) {
+    // First try manual projects
+    const manualProject = getProjectBySlug(slug)
+    if (manualProject) {
+        return { ...manualProject, source: 'manual' as const }
+    }
+
+    // Try GitHub projects
+    if (slug.startsWith('github-')) {
+        for (const config of githubProjects) {
+            const match = config.url.match(/github\.com\/[^\/]+\/([^\/]+)/i)
+            if (match) {
+                const expectedSlug = repoToSlug(match[1].replace(/\.git$/, ''))
+                if (expectedSlug === slug) {
+                    const project = await fetchGitHubProject(config)
+                    return project
+                }
+            }
+        }
+    }
+
+    return null
 }
 
 // Generate metadata for each project
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params
-    const project = getProjectBySlug(slug)
+    const project = await getProject(slug)
     if (!project) return { title: 'Project Not Found' }
     return {
         title: `${project.title} | Projects`,
@@ -31,7 +74,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
     const { slug } = await params
-    const project = getProjectBySlug(slug)
+    const project = await getProject(slug)
 
     if (!project) {
         notFound()
@@ -65,18 +108,25 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                                 FEATURED
                             </div>
                         )}
+                        {project.source === 'github' && (
+                            <div className="absolute right-4 top-4 rounded-full bg-muted px-3 py-1 text-xs font-medium text-foreground flex items-center gap-1">
+                                <Github className="h-3 w-3" />
+                                Auto-synced
+                            </div>
+                        )}
                     </div>
 
                     {/* Header */}
                     <header className="mt-8">
                         <div className="flex flex-wrap gap-2">
                             {project.tags.map((tag) => (
-                                <span
+                                <Link
                                     key={tag}
-                                    className="rounded-full border border-coral px-3 py-1 text-sm font-medium text-coral"
+                                    href={`/projects?tag=${encodeURIComponent(tag)}`}
+                                    className="rounded-full border border-coral px-3 py-1 text-sm font-medium text-coral hover:bg-coral hover:text-background transition-colors"
                                 >
                                     {tag}
-                                </span>
+                                </Link>
                             ))}
                         </div>
                         <h1 className="mt-4 text-3xl font-bold text-foreground lg:text-4xl xl:text-5xl">
@@ -112,18 +162,25 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                     {/* Divider */}
                     <div className="my-10 h-px bg-border" />
 
-                    {/* Content with enhanced MDX */}
+                    {/* Content */}
                     <div className="prose prose-invert prose-coral max-w-none">
-                        <MDXRemote
-                            source={project.content}
-                            components={mdxComponents}
-                            options={{
-                                mdxOptions: {
-                                    remarkPlugins: [remarkGfm, remarkMath],
-                                    rehypePlugins: [rehypeKatex, rehypeHighlight],
-                                }
-                            }}
-                        />
+                        {project.source === 'github' && 'isHtml' in project && project.isHtml ? (
+                            <div
+                                className="github-readme"
+                                dangerouslySetInnerHTML={{ __html: project.content }}
+                            />
+                        ) : (
+                            <MDXRemote
+                                source={project.content}
+                                components={mdxComponents}
+                                options={{
+                                    mdxOptions: {
+                                        remarkPlugins: [remarkGfm, remarkMath],
+                                        rehypePlugins: [rehypeKatex, rehypeHighlight],
+                                    }
+                                }}
+                            />
+                        )}
                     </div>
 
                     {/* Footer Navigation */}

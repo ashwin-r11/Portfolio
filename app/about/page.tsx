@@ -19,9 +19,11 @@ export default function AboutPage() {
             {/* Photo */}
             <div className="shrink-0">
               <div className="relative h-48 w-48 overflow-hidden rounded-3xl bg-coral lg:h-64 lg:w-64">
-                <div className="flex h-full w-full items-center justify-center">
-                  <span className="text-6xl font-bold text-background lg:text-7xl">{siteConfig.name.initials}</span>
-                </div>
+                <img
+                  src="/My_pfp.png"
+                  alt={siteConfig.name.full}
+                  className="h-full w-full object-cover"
+                />
               </div>
             </div>
 

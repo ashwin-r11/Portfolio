@@ -12,6 +12,7 @@ export interface BlogPost {
     title: string
     excerpt: string
     date: string
+    image?: string
     tags: string[]
     readTime: string
     featured: boolean
@@ -28,6 +29,8 @@ export interface ProjectDoc {
     githubUrl: string
     featured: boolean
     content: string
+    source?: 'manual' | 'github'
+    year?: string
 }
 
 // Blog Posts
@@ -50,6 +53,7 @@ export function getAllPosts(): Omit<BlogPost, 'content'>[] {
             title: data.title || 'Untitled',
             excerpt: data.excerpt || '',
             date: data.date || '',
+            image: data.image || '',
             tags: data.tags || [],
             readTime: data.readTime || '5 min read',
             featured: data.featured || false,
@@ -75,6 +79,7 @@ export function getPostBySlug(slug: string): BlogPost | null {
         title: data.title || 'Untitled',
         excerpt: data.excerpt || '',
         date: data.date || '',
+        image: data.image || '',
         tags: data.tags || [],
         readTime: data.readTime || '5 min read',
         featured: data.featured || false,
@@ -112,6 +117,12 @@ export function getAllProjectDocs(): Omit<ProjectDoc, 'content'>[] {
         const fileContent = fs.readFileSync(filePath, 'utf-8')
         const { data } = matter(fileContent)
 
+        // Extract year from year field or date field
+        let year = data.year ? String(data.year) : undefined
+        if (!year && data.date) {
+            year = new Date(data.date).getFullYear().toString()
+        }
+
         return {
             slug,
             title: data.title || 'Untitled',
@@ -121,13 +132,15 @@ export function getAllProjectDocs(): Omit<ProjectDoc, 'content'>[] {
             liveUrl: data.liveUrl || '#',
             githubUrl: data.githubUrl || '#',
             featured: data.featured || false,
+            year,
         }
     })
 
-    // Sort: featured first, then by title
+    // Sort: featured first, then by year (newest), then title
     return projects.sort((a, b) => {
         if (a.featured && !b.featured) return -1
         if (!a.featured && b.featured) return 1
+        if (a.year && b.year) return b.year.localeCompare(a.year)
         return a.title.localeCompare(b.title)
     })
 }
@@ -142,6 +155,12 @@ export function getProjectBySlug(slug: string): ProjectDoc | null {
     const fileContent = fs.readFileSync(filePath, 'utf-8')
     const { data, content } = matter(fileContent)
 
+    // Extract year from year field or date field
+    let year = data.year ? String(data.year) : undefined
+    if (!year && data.date) {
+        year = new Date(data.date).getFullYear().toString()
+    }
+
     return {
         slug,
         title: data.title || 'Untitled',
@@ -152,6 +171,7 @@ export function getProjectBySlug(slug: string): ProjectDoc | null {
         githubUrl: data.githubUrl || '#',
         featured: data.featured || false,
         content,
+        year,
     }
 }
 

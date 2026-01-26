@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowUpRight, Clock, Search, LayoutGrid, List, X } from "lucide-react"
 
 interface PostMeta {
@@ -9,6 +10,7 @@ interface PostMeta {
     title: string
     excerpt: string
     date: string
+    image: string
     tags: string[]
     readTime: string
     featured: boolean
@@ -23,6 +25,7 @@ export function BlogFilters({ posts, allTags }: BlogFiltersProps) {
     const [searchQuery, setSearchQuery] = useState("")
     const [selectedTags, setSelectedTags] = useState<string[]>([])
     const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+    const [showFilters, setShowFilters] = useState(false)
 
     const filteredPosts = useMemo(() => {
         return posts.filter(post => {
@@ -74,6 +77,21 @@ export function BlogFilters({ posts, allTags }: BlogFiltersProps) {
                         )}
                     </div>
 
+                    {/* Filter Toggle Button */}
+                    <button
+                        onClick={() => setShowFilters(!showFilters)}
+                        className={`flex items-center gap-2 rounded-xl border border-border px-4 py-3 text-sm font-medium transition-colors ${showFilters ? 'bg-coral text-background border-coral' : 'bg-card text-foreground hover:bg-muted'
+                            }`}
+                    >
+                        <List className="h-4 w-4" />
+                        Filters
+                        {selectedTags.length > 0 && (
+                            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-background text-[10px] font-bold text-coral">
+                                {selectedTags.length}
+                            </span>
+                        )}
+                    </button>
+
                     {/* View Toggle */}
                     <div className="flex rounded-xl bg-card p-1">
                         <button
@@ -91,30 +109,40 @@ export function BlogFilters({ posts, allTags }: BlogFiltersProps) {
                     </div>
                 </div>
 
-                {/* Tags */}
-                <div className="flex flex-wrap items-center gap-2">
-                    <span className="text-xs text-muted-foreground">Tags:</span>
-                    {allTags.map((tag) => (
-                        <button
-                            key={tag}
-                            onClick={() => toggleTag(tag)}
-                            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${selectedTags.includes(tag)
-                                    ? "bg-coral text-background"
-                                    : "bg-card text-foreground hover:bg-muted"
-                                }`}
-                        >
-                            {tag}
-                        </button>
-                    ))}
-                    {(selectedTags.length > 0 || searchQuery) && (
-                        <button
-                            onClick={clearFilters}
-                            className="ml-2 text-xs text-coral hover:underline"
-                        >
-                            Clear all
-                        </button>
-                    )}
-                </div>
+                {/* Collapsible Filters Panel */}
+                {showFilters && (
+                    <div className="rounded-2xl bg-card p-6 shadow-sm ring-1 ring-border animate-in slide-in-from-top-2 duration-200">
+                        <div>
+                            <h4 className="mb-3 text-sm font-semibold text-foreground">Tags</h4>
+                            <div className="flex flex-wrap gap-2">
+                                {allTags.map((tag) => (
+                                    <button
+                                        key={tag}
+                                        onClick={() => toggleTag(tag)}
+                                        className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${selectedTags.includes(tag)
+                                            ? "bg-coral text-background"
+                                            : "bg-muted text-muted-foreground hover:text-foreground"
+                                            }`}
+                                    >
+                                        {tag}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Reset Button */}
+                        {(selectedTags.length > 0) && (
+                            <div className="mt-6 flex justify-end border-t border-border pt-4">
+                                <button
+                                    onClick={clearFilters}
+                                    className="text-sm font-medium text-coral hover:underline"
+                                >
+                                    Reset all filters
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             {/* Results Count */}
@@ -129,32 +157,45 @@ export function BlogFilters({ posts, allTags }: BlogFiltersProps) {
                         <Link
                             key={post.slug}
                             href={`/blog/${post.slug}`}
-                            className="group mb-4 block break-inside-avoid rounded-2xl bg-card p-6 transition-all hover:bg-muted hover:scale-[1.02]"
-                            style={{
-                                // Varying heights for masonry effect
-                                minHeight: post.featured ? "280px" : index % 3 === 0 ? "220px" : index % 2 === 0 ? "180px" : "200px"
-                            }}
+                            className="group mb-4 block break-inside-avoid overflow-hidden rounded-2xl bg-card transition-all hover:scale-[1.02]"
                         >
-                            {post.featured && (
-                                <span className="mb-3 inline-block rounded-full bg-coral px-3 py-1 text-xs font-medium text-background">
-                                    FEATURED
-                                </span>
-                            )}
-                            <div className="flex flex-wrap gap-2">
-                                {post.tags.map(tag => (
-                                    <span key={tag} className="text-xs font-medium text-coral">{tag}</span>
-                                ))}
-                            </div>
-                            <h3 className="mt-3 text-lg font-bold text-foreground group-hover:text-coral">{post.title}</h3>
-                            <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{post.excerpt}</p>
-                            <div className="mt-4 flex items-center justify-between">
-                                <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                                    <span>{post.date}</span>
-                                    <span className="flex items-center gap-1">
-                                        <Clock className="h-3 w-3" /> {post.readTime}
-                                    </span>
+                            {/* Blog Cover Image */}
+                            {post.image && (
+                                <div className="relative aspect-video w-full overflow-hidden">
+                                    <Image
+                                        src={post.image}
+                                        alt={post.title}
+                                        fill
+                                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                                    />
                                 </div>
-                                <ArrowUpRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:rotate-45 group-hover:text-coral" />
+                            )}
+
+                            <div className="p-6">
+                                {post.featured && (
+                                    <span className="mb-3 inline-block rounded-full bg-coral px-3 py-1 text-xs font-medium text-background">
+                                        FEATURED
+                                    </span>
+                                )}
+                                <div className="flex flex-wrap gap-2">
+                                    {post.tags.slice(0, 3).map(tag => (
+                                        <span key={tag} className="rounded-full border border-coral px-2.5 py-1 text-xs font-medium text-coral">{tag}</span>
+                                    ))}
+                                    {post.tags.length > 3 && (
+                                        <span className="text-xs text-muted-foreground">+{post.tags.length - 3}</span>
+                                    )}
+                                </div>
+                                <h3 className="mt-3 text-lg font-bold text-foreground group-hover:text-coral">{post.title}</h3>
+                                <p className="mt-2 text-sm text-muted-foreground line-clamp-3">{post.excerpt}</p>
+                                <div className="mt-4 flex items-center justify-between">
+                                    <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                                        <span>{post.date}</span>
+                                        <span className="flex items-center gap-1">
+                                            <Clock className="h-3 w-3" /> {post.readTime}
+                                        </span>
+                                    </div>
+                                    <ArrowUpRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:rotate-45 group-hover:text-coral" />
+                                </div>
                             </div>
                         </Link>
                     ))}
@@ -165,19 +206,30 @@ export function BlogFilters({ posts, allTags }: BlogFiltersProps) {
                         <Link
                             key={post.slug}
                             href={`/blog/${post.slug}`}
-                            className="group flex flex-col gap-4 rounded-2xl bg-card p-6 transition-colors hover:bg-muted md:flex-row md:items-center md:justify-between"
+                            className="group flex flex-col gap-6 rounded-2xl bg-card p-6 transition-colors hover:bg-muted md:flex-row"
                         >
+                            {/* Image (List View) */}
+                            {post.image && (
+                                <div className="relative aspect-video w-full shrink-0 overflow-hidden rounded-xl md:w-64">
+                                    <Image
+                                        src={post.image}
+                                        alt={post.title}
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                            )}
                             <div className="flex-1">
-                                <div className="flex flex-wrap items-center gap-3">
+                                <div className="flex flex-wrap items-center gap-2">
                                     {post.featured && (
                                         <span className="rounded-full bg-coral px-3 py-1 text-xs font-medium text-background">
                                             FEATURED
                                         </span>
                                     )}
                                     {post.tags.map(tag => (
-                                        <span key={tag} className="text-xs font-medium text-coral">{tag}</span>
+                                        <span key={tag} className="rounded-full border border-coral px-2.5 py-1 text-xs font-medium text-coral">{tag}</span>
                                     ))}
-                                    <span className="text-xs text-muted-foreground">{post.date}</span>
+                                    <span className="ml-2 text-xs text-muted-foreground">{post.date}</span>
                                 </div>
                                 <h3 className="mt-2 text-xl font-bold text-foreground group-hover:text-coral">{post.title}</h3>
                                 <p className="mt-2 text-muted-foreground">{post.excerpt}</p>

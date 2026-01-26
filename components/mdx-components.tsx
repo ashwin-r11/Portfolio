@@ -37,43 +37,38 @@ function Video({ src, title }: { src: string; title?: string }) {
 
 // Custom components for MDX
 export const mdxComponents: MDXComponents = {
-    // Enhanced image with Next.js optimization
+    // Enhanced image with natural sizing (fixes huge badges)
     img: ({ src, alt, ...props }) => {
         if (!src) return null
-
-        // Handle SVG
-        if (src.endsWith('.svg')) {
-            return (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                    src={src}
-                    alt={alt || ''}
-                    className="my-6 max-w-full rounded-lg"
-                    {...props}
-                />
-            )
-        }
-
         return (
-            <span className="block my-6">
-                <Image
-                    src={src}
-                    alt={alt || ''}
-                    width={800}
-                    height={450}
-                    className="rounded-xl"
-                    {...props}
-                />
-            </span>
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+                src={src}
+                alt={alt || ''}
+                className="my-6 max-w-full h-auto rounded-lg"
+                {...props}
+            />
         )
     },
 
-    // Enhanced links
+    // Enhanced links with auto-video embedding
     a: ({ href, children, ...props }) => {
-        const isExternal = href?.startsWith('http')
+        if (!href) return null
+
+        // Check if it's a video file or a GitHub user attachment
+        const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(href) || href.includes('github.com/user-attachments/assets/')
+
+        // Don't embed if it's explicitly a "Download" link
+        const isDownload = typeof children === 'string' && children.toLowerCase().includes('download')
+
+        if (isVideo && !isDownload) {
+            return <Video src={href} title={typeof children === 'string' ? children : 'Video'} />
+        }
+
+        const isExternal = href.startsWith('http')
         return (
             <Link
-                href={href || '#'}
+                href={href}
                 target={isExternal ? '_blank' : undefined}
                 rel={isExternal ? 'noopener noreferrer' : undefined}
                 className="text-coral underline underline-offset-2 hover:text-foreground transition-colors"

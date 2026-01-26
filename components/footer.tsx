@@ -13,7 +13,6 @@ const footerLinks = [
   { name: "Blog", href: "/blog" },
   { name: "Projects", href: "/projects" },
   { name: "Skills", href: "/skills" },
-  { name: "Stats", href: "/stats" },
 ]
 
 export function Footer() {

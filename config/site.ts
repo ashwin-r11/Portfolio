@@ -28,10 +28,6 @@ export const siteConfig = {
     "I'm particularly interested in AI safety, robustness, and long-term human–AI coexistence. I approach AI as an engineering discipline first: constrained, testable, and accountable. Outside of core development, I explore alignment research, system failure modes, and the societal implications of advanced AI systems."
   ],
   status: "OPEN TO INTERNSHIPS",
-  yearsExperience: "Fresher",
-  projectsCount: "10+",
-  clientsCount: "0", // Update this manually
-  fossContributions: "5+", // FOSS projects contributed to
 
   // ============================================
   // LOCATION & CONTACT
@@ -99,7 +95,7 @@ export const siteConfig = {
     degree: "B.Tech Computer Science Engineering - IoT & Automation",
     school: "Sastra Deemed University",
     period: "2023 - 2027",
-    cgpa: "7.729",
+    cgpa: "7.7965",
   },
 
   // ============================================
@@ -164,15 +160,6 @@ export const siteConfig = {
   recentPosts: [],
 }
 
-// Helper to get GitHub stats URLs
-export function getGitHubStatsUrls(username: string, colors: typeof siteConfig.colors) {
-  return {
-    stats: `https://github-readme-stats-sigma-five.vercel.app/api?username=${username}&show_icons=true&hide_border=true&bg_color=${colors.transparent}&title_color=${colors.coral}&icon_color=${colors.sage}&text_color=${colors.cream}&include_all_commits=true&count_private=true`,
-    topLangs: `https://github-readme-stats-sigma-five.vercel.app/api/top-langs/?username=${username}&layout=compact&hide_border=true&bg_color=${colors.transparent}&title_color=${colors.coral}&text_color=${colors.cream}&hide=html,css`,
-    streak: `https://streak-stats.demolab.com?user=${username}&theme=transparent&hide_border=true&ring=${colors.coral}&fire=${colors.coral}&currStreakLabel=${colors.cream}&sideLabels=${colors.cream}&currStreakNum=${colors.cream}&sideNums=${colors.cream}&dates=${colors.sage}`,
-    activity: `https://github-readme-activity-graph.vercel.app/graph?username=${username}&bg_color=${colors.transparent}&color=${colors.cream}&line=${colors.coral}&point=${colors.sage}&area=true&area_color=${colors.coral}&hide_border=true&custom_title=Contribution%20Activity`,
-    contributions: `https://ghchart.rshah.org/${colors.coral}/${username}`,
-  }
-}
+
 
 export type SiteConfig = typeof siteConfig

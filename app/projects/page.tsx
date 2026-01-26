@@ -1,12 +1,32 @@
-import Link from "next/link"
 import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { getAllProjectDocs, getAllProjectTags } from "@/lib/markdown"
+import { fetchAllGitHubProjects } from "@/lib/github"
+import { githubProjects } from "@/config/github-projects"
 import { ProjectFilters } from "@/components/project-filters"
 
 export default async function ProjectsPage() {
-  const projects = getAllProjectDocs()
-  const allTags = getAllProjectTags()
+  // Get manual projects from markdown files
+  const manualProjects = getAllProjectDocs().map(p => ({
+    ...p,
+    source: 'manual' as const
+  }))
+
+  // Get GitHub projects (fetched at build time / ISR)
+  const githubProjectsData = await fetchAllGitHubProjects(githubProjects)
+
+  // Combine all projects
+  const allProjects = [...manualProjects, ...githubProjectsData]
+
+  // Sort: featured first, then by title
+  allProjects.sort((a, b) => {
+    if (a.featured && !b.featured) return -1
+    if (!a.featured && b.featured) return 1
+    return a.title.localeCompare(b.title)
+  })
+
+  // Get all unique tags from all projects
+  const allTags = [...new Set(allProjects.flatMap(p => p.tags))]
 
   return (
     <div className="min-h-screen bg-background">
@@ -23,7 +43,7 @@ export default async function ProjectsPage() {
           </div>
 
           {/* Client-side filters */}
-          <ProjectFilters projects={projects} allTags={allTags} />
+          <ProjectFilters projects={allProjects} allTags={allTags} />
         </div>
       </main>
       <Footer />

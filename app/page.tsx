@@ -5,10 +5,25 @@ import { Navbar } from "@/components/navbar"
 import { Footer } from "@/components/footer"
 import { siteConfig } from "@/config/site"
 import { getAllPosts, getAllProjectDocs } from "@/lib/markdown"
+import { fetchAllGitHubProjects } from "@/lib/github"
+import { githubProjects } from "@/config/github-projects"
 
-export default function HomePage() {
+export default async function HomePage() {
   const recentPosts = getAllPosts().slice(0, 3)
-  const recentProjects = getAllProjectDocs().slice(0, 3)
+
+  // Get all projects (manual + GitHub)
+  const manualProjects = getAllProjectDocs()
+  const githubProjectsData = await fetchAllGitHubProjects(githubProjects)
+  const allProjects = [...manualProjects, ...githubProjectsData]
+
+  // Sort: featured first, then take first 3
+  allProjects.sort((a, b) => {
+    if (a.featured && !b.featured) return -1
+    if (!a.featured && b.featured) return 1
+    return a.title.localeCompare(b.title)
+  })
+  const recentProjects = allProjects.slice(0, 3)
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -58,26 +73,20 @@ export default function HomePage() {
                 <p className="mt-2 text-lg font-bold text-foreground">{siteConfig.status}</p>
               </div>
 
-              {/* Stats Row */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-2xl bg-sage p-5">
-                  <span className="text-3xl font-bold text-sage-foreground">{siteConfig.projectsCount}</span>
-                  <p className="text-xs text-sage-foreground/70">PROJECTS</p>
-                </div>
-                <div className="rounded-2xl bg-coral p-5">
-                  <span className="text-3xl font-bold text-background">{siteConfig.yearsExperience}</span>
-                  <p className="text-xs text-background/70">YEARS EXP</p>
-                </div>
-              </div>
+
 
               {/* Tech Stack */}
               <div className="rounded-2xl bg-card p-5">
                 <span className="text-xs font-medium tracking-wider text-muted-foreground">TECH STACK</span>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {siteConfig.techStack.map((tech) => (
-                    <span key={tech} className="rounded-lg bg-muted px-3 py-1.5 text-xs font-medium text-foreground">
+                    <Link
+                      key={tech}
+                      href={`/projects?tag=${encodeURIComponent(tech)}`}
+                      className="rounded-lg bg-muted px-3 py-1.5 text-xs font-medium text-foreground transition-all hover:bg-coral hover:text-background"
+                    >
                       {tech}
-                    </span>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -124,16 +133,30 @@ export default function HomePage() {
                 <Link
                   key={post.slug}
                   href={`/blog/${post.slug}`}
-                  className="group rounded-2xl bg-card p-6 transition-all hover:bg-muted"
+                  className="group block overflow-hidden rounded-2xl bg-card transition-all hover:bg-muted hover:scale-[1.02]"
                 >
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags.slice(0, 2).map((tag) => (
-                      <span key={tag} className="text-xs font-medium text-coral">{tag}</span>
-                    ))}
+                  {/* Post Image */}
+                  {post.image && (
+                    <div className="relative aspect-video w-full overflow-hidden">
+                      <Image
+                        src={post.image}
+                        alt={post.title}
+                        fill
+                        className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      />
+                    </div>
+                  )}
+
+                  <div className="p-6">
+                    <div className="flex flex-wrap gap-2">
+                      {post.tags.slice(0, 2).map((tag) => (
+                        <span key={tag} className="text-xs font-medium text-coral">{tag}</span>
+                      ))}
+                    </div>
+                    <h3 className="mt-3 text-lg font-bold text-foreground group-hover:text-coral">{post.title}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>
+                    <p className="mt-3 text-xs text-muted-foreground">{post.date}</p>
                   </div>
-                  <h3 className="mt-3 text-lg font-bold text-foreground group-hover:text-coral">{post.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{post.excerpt}</p>
-                  <p className="mt-3 text-xs text-muted-foreground">{post.date}</p>
                 </Link>
               ))}
             </div>
@@ -153,18 +176,31 @@ export default function HomePage() {
                 <Link
                   key={project.slug}
                   href={`/projects/${project.slug}`}
-                  className="group rounded-2xl bg-card p-6 transition-all hover:bg-muted"
+                  className="group block overflow-hidden rounded-2xl bg-card transition-all hover:bg-muted hover:scale-[1.02]"
                 >
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.slice(0, 3).map((tag) => (
-                      <span key={tag} className="rounded-full border border-coral px-2.5 py-1 text-xs font-medium text-coral">{tag}</span>
-                    ))}
+                  {/* Project Image */}
+                  <div className="relative aspect-video w-full overflow-hidden">
+                    <Image
+                      src={project.image || "/placeholder.svg"}
+                      alt={project.title}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent opacity-60" />
                   </div>
-                  <h3 className="mt-3 text-lg font-bold text-foreground group-hover:text-coral">{project.title}</h3>
-                  <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{project.description}</p>
-                  <div className="mt-4 flex items-center gap-2 text-xs text-coral">
-                    <span>View Details</span>
-                    <ArrowUpRight className="h-3 w-3 transition-transform group-hover:rotate-45" />
+
+                  <div className="p-6">
+                    <div className="flex flex-wrap gap-2">
+                      {project.tags.slice(0, 3).map((tag) => (
+                        <span key={tag} className="rounded-full border border-coral px-2.5 py-1 text-xs font-medium text-coral">{tag}</span>
+                      ))}
+                    </div>
+                    <h3 className="mt-3 text-lg font-bold text-foreground group-hover:text-coral">{project.title}</h3>
+                    <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{project.description}</p>
+                    <div className="mt-4 flex items-center gap-2 text-xs text-coral">
+                      <span>View Details</span>
+                      <ArrowUpRight className="h-3 w-3 transition-transform group-hover:rotate-45" />
+                    </div>
                   </div>
                 </Link>
               ))}
