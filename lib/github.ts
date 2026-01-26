@@ -168,6 +168,7 @@ function sanitizeForMDX(content: string): string {
     result = result.replace(/\s+border="[^"]*"/gi, '')
     result = result.replace(/\s+cellspacing="[^"]*"/gi, '')
     result = result.replace(/\s+cellpadding="[^"]*"/gi, '')
+    result = result.replace(/\s+style="[^"]*"/gi, '') // Fix: MDX/React doesn't accept string style prop
 
     return result
 }
