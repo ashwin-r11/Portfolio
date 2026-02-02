@@ -34,7 +34,6 @@ export interface GitHubProjectConfig {
 export const githubProjects: GitHubProjectConfig[] = [
     {
         url: "https://github.com/ashwin-r11/Dexsent_round2",
-        featured: true,
         image: "/project1.png", // Path to your local image or a URL
         extraTags: ["Robotics", "Docker"],
         liveUrl: null, // Disable live demo button
@@ -57,4 +56,11 @@ export const githubProjects: GitHubProjectConfig[] = [
         image: "https://camo.githubusercontent.com/e0293f41067d65e909e60397415f8de91c76700e3607a55546f62569407e330f/68747470733a2f2f696d616765732d6173736574732e6e6173612e676f762f696d6167652f475346435f32303137313230385f417263686976655f653030303731302f475346435f32303137313230385f417263686976655f653030303731307e736d616c6c2e6a7067", // Add your thumbnail URL here
         extraTags: [],
     },
-]
+    {
+        url: "https://github.com/ashwin-r11/drupal10-event-registration",
+        featured: true,
+        title: "Drupal10 Event Registration module",
+        image: "https://raw.githubusercontent.com/ashwin-r11/drupal10-event-registration/main/docs/logo.png", // Add your thumbnail URL here
+        extraTags: ["Drupal10", "PHP", "MySQL"],
+    },
+] 

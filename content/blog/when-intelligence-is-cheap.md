@@ -20,6 +20,7 @@ In the past, this gap was attributed to genius, madness, or bad luck. Today, it�
 Now we’re entering another shift. Artificial intelligence is rapidly making competence abundant. The ability to generate text, images, or code is no longer rare. Intelligence—at least in its visible, output-oriented form—is becoming cheap. That forces a harder question into view: if intelligence is no longer the bottleneck, what is?
 
 This essay is an attempt to reason through that question using observation rather than prediction. It looks at why artists and thinkers often feel out of sync, why that misalignment may be structural rather than personal, and why human context—embodied, risky, and situated—may become more valuable precisely because machines can now imitate everything else.
+
 ## The Architecture of Waiting: Why Great Work is Always Early
 
 We tend to tell a very specific, romantic story about the creative life. It’s the story of the "misunderstood genius"—the painter, the coder, or the philosopher who toils in obscurity, rejected by a world that just isn’t smart enough to get it. We view this isolation as a tragedy, or worse, a character flaw.
