@@ -81,7 +81,7 @@ export const technicalKeywords = [
     "ASP.NET", "ASP.NET Core", "Entity Framework", "Blazor",
     "Go Gin", "Echo", "Fiber", "Chi", "Gorm", "Ent",
     "Rust Axum", "Actix", "Actix Web", "Rocket", "Tower", "Tokio", "Diesel", "Sqlx",
-    "Ruby on Rails", "Sinatra", "Hanami", "Laravel", "Symfony", "CodeIgniter", "Phoenix", "Ecto",
+    "Ruby on Rails", "Sinatra", "Hanami", "Laravel", "Symfony", "CodeIgniter", "Drupal", "Drupal10", "Phoenix", "Ecto",
 
     // Databases
     "PostgreSQL", "MySQL", "MariaDB", "SQLite", "Oracle", "SQL Server", "CockroachDB", "TiDB",
