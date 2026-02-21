@@ -195,7 +195,15 @@ export async function fetchGitHubProject(config: GitHubProjectConfig): Promise<G
 
     if (!metadata) return null
 
-    const readme = await fetchReadmeMarkdown(owner, repo, metadata.default_branch)
+    let readme = await fetchReadmeMarkdown(owner, repo, metadata.default_branch)
+
+    // Apply video URL overrides (replace broken user-attachment URLs with raw repo file URLs)
+    if (config.videoOverrides) {
+        const baseRawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${metadata.default_branch}`
+        for (const [brokenUrl, repoPath] of Object.entries(config.videoOverrides)) {
+            readme = readme.replaceAll(brokenUrl, `${baseRawUrl}/${repoPath}`)
+        }
+    }
 
     // Generate tags from topics + language + extra tags
     const autoTags: string[] = [

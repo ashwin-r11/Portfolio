@@ -25,6 +25,8 @@ export interface GitHubProjectConfig {
     featured?: boolean
     /** Optional: Override live URL (set to null to disable) */
     liveUrl?: string | null
+    /** Optional: Map broken video URLs to repo-relative file paths */
+    videoOverrides?: Record<string, string>
 }
 
 /**
@@ -55,7 +57,11 @@ export const githubProjects: GitHubProjectConfig[] = [
         url: "https://github.com/ashwin-r11/Schwarzschild-RTX-Real-Time-Relativistic-Spacetime-Engine",
         featured: true,
         title: "Schwarzschild-RTX",
-        image: "https://raw.githubusercontent.com/ashwin-r11/Schwarzschild-RTX-Real-Time-Relativistic-Spacetime-Engine/main/docs/screenshots/oblique_bloom_closeup.png", // Add your thumbnail URL here
+        image: "https://raw.githubusercontent.com/ashwin-r11/Schwarzschild-RTX-Real-Time-Relativistic-Spacetime-Engine/main/docs/screenshots/oblique_bloom_closeup.png",
         extraTags: ["C++", "OpenGL", "Ray Tracing", "CMake", "GLSL"],
+        videoOverrides: {
+            "https://github.com/user-attachments/assets/d0b152b4-3ae9-4057-8ffa-498949765ca8": "docs/screenshots/wasd_camera_demo.mp4",
+            "https://github.com/user-attachments/assets/ee758a30-f8ba-451b-b708-1f91eae35b5a": "docs/screenshots/particle_flow_demo.mp4",
+        },
     },
 ] 
