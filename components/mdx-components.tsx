@@ -45,7 +45,7 @@ export const mdxComponents: MDXComponents = {
             <img
                 src={src}
                 alt={alt || ''}
-                className="my-6 max-w-full h-auto rounded-lg"
+                className="my-6 w-full h-auto rounded-xl"
                 {...props}
             />
         )

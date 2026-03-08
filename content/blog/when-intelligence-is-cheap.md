@@ -5,7 +5,7 @@ date: "2026-01-26"
 image: "/when-intelligence-is-cheap.jpeg"
 tags: ["Artificial Intelligence", "Philosophy", "Human Creativity", "Future"]
 readTime: "8 min read"
-featured: true
+featured: false
 ---
 
 

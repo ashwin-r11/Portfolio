@@ -55,7 +55,7 @@ export const githubProjects: GitHubProjectConfig[] = [
 
     {
         url: "https://github.com/ashwin-r11/Schwarzschild-RTX-Real-Time-Relativistic-Spacetime-Engine",
-        featured: true,
+        featured: false,
         title: "Schwarzschild-RTX",
         image: "https://raw.githubusercontent.com/ashwin-r11/Schwarzschild-RTX-Real-Time-Relativistic-Spacetime-Engine/main/docs/screenshots/oblique_bloom_closeup.png",
         extraTags: ["C++", "OpenGL", "Ray Tracing", "CMake", "GLSL"],
