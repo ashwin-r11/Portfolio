@@ -59,27 +59,57 @@ export default function AboutPage() {
           <div className="mt-24">
             <h2 className="text-2xl font-bold text-foreground">EXPERIENCE</h2>
 
-            {siteConfig.experience.length > 0 ? (
+            {siteConfig.experience.length > 0 && (
               <div className="mt-8 space-y-6">
-                {siteConfig.experience.map((item, index) => (
-                  <div key={index} className="group rounded-2xl bg-card p-6 transition-colors hover:bg-muted">
-                    <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3">
-                          <h3 className="text-lg font-bold text-foreground">{item.role}</h3>
-                          <ArrowUpRight className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                {siteConfig.experience.map((item, index) => {
+                  const isCardLink = !!(item as any).url
+                  const CardWrapper = isCardLink ? 'a' : 'div'
+                  const wrapperProps = isCardLink ? { href: (item as any).url, target: '_blank', rel: 'noopener noreferrer' } : {}
+
+                  return (
+                    <CardWrapper
+                      key={index}
+                      {...wrapperProps}
+                      className={`block group rounded-2xl bg-card p-6 transition-colors hover:bg-muted`}
+                    >
+                      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3">
+                            <h3 className="text-lg font-bold text-foreground">{item.role}</h3>
+                            {isCardLink && <ArrowUpRight className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />}
+                          </div>
+                          <p className="mt-1 text-coral">{item.company}</p>
+                          <p className="mt-3 text-muted-foreground">{item.description}</p>
+                          
+                          {(item as any).links && (
+                            <div className="mt-4 flex flex-wrap gap-3">
+                              {(item as any).links.map((link: any, i: number) => (
+                                <a
+                                  key={i}
+                                  href={link.url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-medium text-foreground transition-colors hover:bg-muted hover:border-coral"
+                                  onClick={(e) => isCardLink && e.stopPropagation()}
+                                >
+                                  {link.name}
+                                  <ArrowUpRight className="h-3 w-3" />
+                                </a>
+                              ))}
+                            </div>
+                          )}
                         </div>
-                        <p className="mt-1 text-coral">{item.company}</p>
-                        <p className="mt-3 text-muted-foreground">{item.description}</p>
+                        <span className="shrink-0 rounded-lg bg-muted px-3 py-1 text-xs font-medium text-muted-foreground md:bg-transparent">
+                          {item.period}
+                        </span>
                       </div>
-                      <span className="shrink-0 rounded-lg bg-muted px-3 py-1 text-xs font-medium text-muted-foreground md:bg-transparent">
-                        {item.period}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+                    </CardWrapper>
+                  )
+                })}
               </div>
-            ) : siteConfig.seekingOpportunities?.active ? (
+            )}
+            
+            {siteConfig.seekingOpportunities?.active && (
               <div className="mt-8 rounded-2xl bg-gradient-to-br from-coral/20 to-sage/20 p-8">
                 <div className="flex items-start gap-4">
                   <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-coral">
@@ -106,7 +136,9 @@ export default function AboutPage() {
                   </div>
                 </div>
               </div>
-            ) : (
+            )}
+
+            {siteConfig.experience.length === 0 && !siteConfig.seekingOpportunities?.active && (
               <p className="mt-8 text-muted-foreground">No experience listed yet.</p>
             )}
           </div>

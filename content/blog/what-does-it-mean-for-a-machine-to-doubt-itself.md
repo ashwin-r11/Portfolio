@@ -193,7 +193,8 @@ This piece is written for a general audience and intentionally omits formal proo
 experimental results, which are available in the accompanying paper. Treat the analogies and 
 explanations as approximations designed for accessibility, not formal specification.
 
-Open source code and the full experimental pipeline: github.com/ashwin-r11/sr-mcu
 ```
+
+Open source code and the full experimental pipeline: [github.com/ashwin-r11/sr-mcu-public](https://github.com/ashwin-r11/sr-mcu-public)
 
 - Image credits: NASA/JPL Caltech (Perseverance imagery and AutoNav simulation), Author (architecture diagram, health timeline, pipeline diagram)

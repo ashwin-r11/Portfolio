@@ -70,9 +70,20 @@ export const siteConfig = {
   },
 
   // ============================================
-  // EXPERIENCE (empty for freshers)
+  // EXPERIENCE
   // ============================================
-  experience: [],
+  experience: [
+    {
+      role: "Software Developer (Summer Fellowship)",
+      company: "FOSSEE, IIT Bombay",
+      period: "May 2026 - Aug 2026",
+      description: "Contributed to the eSim project at FOSSEE (Free/Libre and Open Source Software for Education), an initiative by IIT Bombay, developing open-source solutions for electronic circuit design and simulation.",
+      links: [
+        { name: "FOSSEE", url: "https://fossee.in/" },
+        { name: "eSim Project", url: "https://esim.fossee.in/home" }
+      ],
+    }
+  ],
 
   // Show this message when seeking opportunities
   seekingOpportunities: {
@@ -129,7 +140,33 @@ export const siteConfig = {
       image: "/certs/pcb_udemy.png",
       description: "this course builds a solid foundation in electronics and PCB design by moving from basic circuit concepts to practical, manufacturable boards.It’s valuable because it focuses on hands-on understanding of how real hardware is designed, tested, and prepared for production rather than just theory.",
     },
-
+    {
+      name: "AI Capabilities and Limitations",
+      issuer: "Anthropic Academy",
+      date: "2026",
+      credentialId: "8ssgusyzgkdq",
+      credentialUrl: "https://verify.skilljar.com/c/8ssgusyzgkdq",
+      image: "/certs/certificate-8ssgusyzgkdq-1777141411.jpg",
+      description: "An Anthropic Academy certification covering the capabilities, risks, and limitations of modern Large Language Models, focusing on responsible AI usage and safety.",
+    },
+    {
+      name: "AI Fluency: Framework & Foundations",
+      issuer: "Anthropic Academy",
+      date: "2026",
+      credentialId: "e65zxzfiax3k",
+      credentialUrl: "https://verify.skilljar.com/c/e65zxzfiax3k",
+      image: "/certs/certificate-e65zxzfiax3k-1777141093.jpg",
+      description: "An Anthropic Academy certification on the foundational frameworks of artificial intelligence, including model architectures, alignment, and systems engineering principles.",
+    },
+    {
+      name: "AI Fluency for Students",
+      issuer: "Anthropic Academy",
+      date: "2026",
+      credentialId: "333zv6exx8ct",
+      credentialUrl: "https://verify.skilljar.com/c/333zv6exx8ct",
+      image: "/certs/certificate-333zv6exx8ct-1777140660.jpg",
+      description: "An Anthropic Academy certification designed to introduce students to the core concepts of artificial intelligence, its real-world applications, and the mechanics of language models.",
+    },
   ],
 
   // ============================================
