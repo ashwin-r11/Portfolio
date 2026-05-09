@@ -40,6 +40,20 @@ export const mdxComponents: MDXComponents = {
     // Enhanced image with natural sizing (fixes huge badges)
     img: ({ src, alt, ...props }) => {
         if (!src) return null
+        
+        const isBadge = src.includes('img.shields.io') || src.toLowerCase().includes('badge') || (alt && alt.toLowerCase().includes('badge'))
+        if (isBadge) {
+            return (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                    src={src}
+                    alt={alt || ''}
+                    className="inline-block mr-2 my-1 h-6 w-auto rounded-none"
+                    {...props}
+                />
+            )
+        }
+
         return (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -147,5 +161,5 @@ export const mdxComponents: MDXComponents = {
     ),
 
     // Horizontal rule
-    hr: () => <hr className="my-8 border-border" />,
+    hr: () => <hr className="my-4 border-border/50" />,
 }

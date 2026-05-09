@@ -253,8 +253,6 @@ html {
   margin-top: 2rem;
   margin-bottom: 0.75rem;
   color: var(--foreground);
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0.5rem;
 }
 
 .prose h3 {
